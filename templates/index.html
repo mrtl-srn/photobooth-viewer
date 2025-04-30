@@ -2,51 +2,55 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <title>Photobooth Viewer</title>
-    <style>
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            background: black;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-        }
+  <meta charset="UTF-8">
+  <title>Photobooth Viewer</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background: black;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+    }
 
-        img {
-            display: block;
-            max-width: 100vw;
-            max-height: 100vh;
-            width: auto;
-            height: auto;
-            margin: auto;
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            object-fit: contain;
-        }
-    </style>
-    <script src="{{ url_for('static', filename='socket.io.min.js') }}"></script>
+    img {
+      display: block;
+      max-width: 100vw;
+      max-height: 100vh;
+      width: auto;
+      height: auto;
+      margin: auto;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      object-fit: contain;
+    }
+  </style>
+  <script src="{{ url_for('static', filename='socket.io.min.js') }}"></script>
 </head>
 
 <body>
   <img id="photo" src="" alt="Latest photo">
   <script>
-      const socket = io();
+    const socket = io();
 
-      socket.on('connect', () => {
-          console.log("✅ Connected to WebSocket server");
-      });
+    socket.on('connect', () => {
+      console.log("✅ Connected to WebSocket server");
+    });
 
-      socket.on('new_photo', (data) => {
-          console.log("📸 New photo received", data);
-          const photo = document.getElementById("photo");
-          photo.src = `/photos/${data.filename}`;
-      });
+    socket.on('new_photo', (data) => {
+      console.log("📸 New photo received", data);
+      const photo = document.getElementById("photo");
+      if (data.filename.startsWith('static/')) {
+        photo.src = `/${data.filename}`;
+      } else {
+        photo.src = `/photos/${data.filename}`;
+      }
+    });
   </script>
 </body>
 

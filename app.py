@@ -52,7 +52,7 @@ def handle_connect():
         socketio.emit('new_photo', {'filename': last_sent}, to=request.sid)
     else:
         print("➡️ No files found, sending default image")
-        socketio.emit('new_photo', {'filename': 'default.jpg'}, to=request.sid)
+        socketio.emit('new_photo', {'filename': 'static/default.jpg'}, to=request.sid)
 
 
 def is_valid_photo(filename):
